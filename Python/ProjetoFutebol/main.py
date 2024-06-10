@@ -1,5 +1,6 @@
 def analisaDados(time, quantidadeJogos):
-    print("AAA")
+    import sys
+    sys.path.append('/home/ubuntu/BackAnaliseDadosFutebol/Python/ProjetoFutebol')
     import Funcoes.raspagemDadosTime as raspagem
     import Funcoes.criaListaJogos as listaJogos
     import Funcoes.criaListaTimes as listaTimes
