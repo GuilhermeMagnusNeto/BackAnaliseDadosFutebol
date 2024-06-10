@@ -1,16 +1,25 @@
 def analisaDados(time, quantidadeJogos):
     import sys
     sys.path.append('/home/ubuntu/BackAnaliseDadosFutebol/Python/ProjetoFutebol')
+    print("A")
     import Funcoes.raspagemDadosTime as raspagem
+    print("A")
     import Funcoes.criaListaJogos as listaJogos
+    print("A")
     import Funcoes.criaListaTimes as listaTimes
+    print("A")
     import Funcoes.criaArquivoComDados as arquivo
+    print("A")
     import Funcoes.calcularMedias as calcularMedias
+    print("A")
     import Funcoes.descobrirTimePesquisado as descobrirTime
+    print("A")
     import Funcoes.pegaIdPartida as pegarIdPartida
+    print("A")
     import Escanteios.valorMedias as valorMedias
+    print("A")
     import re
-
+    
     print("Aqui")
     response = raspagem.raspagemDados(time)
 
