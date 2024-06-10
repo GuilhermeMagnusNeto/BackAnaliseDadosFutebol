@@ -1,0 +1,39 @@
+3847912
+Hoffenheim
+4.0
+X
+2.0
+Bayern de Munique
+Escanteios:
+6
+5
+Cartões:
+3
+1
+Posse de Bola:
+48%
+52%
+Chutes no Gol:
+9
+4
+Chutes para Fora:
+4
+4
+Impedimentos:
+1
+3
+Chutes livres:
+8
+7
+Ataques:
+115
+82
+Laterais cobrados:
+16
+10
+Tiros de Meta:
+7
+11
+Cartões Vermelhos:
+0
+0

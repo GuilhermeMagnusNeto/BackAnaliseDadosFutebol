@@ -6,12 +6,12 @@ import mysql.connector
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/executaAnalise": {"origins": "http://127.0.0.1:3000"},
-    r"/pesquisaTimes": {"origins": "http://127.0.0.1:3000"},
-    r"/salvarAnotacao": {"origins": "http://127.0.0.1:3000"},
-    r"/carregarNotas": {"origins": "http://127.0.0.1:3000"},
-    r"/excluirNota/*": {"origins": "http://127.0.0.1:3000"},
-    r"/atualizarNota/*": {"origins": "http://127.0.0.1:3000"}
+    r"/executaAnalise": {"origins": "*"},
+    r"/pesquisaTimes": {"origins": "*"},
+    r"/salvarAnotacao": {"origins": "*"},
+    r"/carregarNotas": {"origins": "*"},
+    r"/excluirNota/*": {"origins": "*"},
+    r"/atualizarNota/*": {"origins": "*"}
 })
 # Configurações de conexão com o banco de dados
 config = {
