@@ -13,6 +13,7 @@ CORS(app, resources={
     r"/excluirNota/*": {"origins": "*"},
     r"/atualizarNota/*": {"origins": "*"}
 })
+
 # Configurações de conexão com o banco de dados
 config = {
     'user': 'admin',
@@ -32,6 +33,8 @@ def executaAnalise():
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
+
+        print("Pesquisou!")
 
         # Execute sua análise
         mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaImpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos = analise.analisaDados(time, quantidadeJogos)
