@@ -28,6 +28,7 @@ def executaAnalise():
         time = request.args.get('time')
         quantidadeJogos = request.args.get('quantidadeJogos')
 
+        print("Pesquisa no banco")
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
@@ -35,10 +36,12 @@ def executaAnalise():
         # Execute sua análise
         mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaImpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos = analise.analisaDados(time, quantidadeJogos)
 
+        print("Fez analise")
         # Feche o cursor e a conexão
         cursor.close()
         conn.close()
 
+        print("Retorna dados")
         # Retorna os resultados da análise em formato JSON
         return jsonify({'Media Gols': mediaGols, 'Media Escanteios': mediaEscanteios, 'Media cartões': mediaCartoes, 'Media posse de bola': mediaPosseDeBola, 'Media chutes no gol': mediaChutesNoGol, 'Media chutes para fora': mediaChutesParaFora, 'Media impedimentos': mediaImpedimentos, 'Media chutes livres': mediaChutesLivres, 'Media ataques': mediaAtaques, 'Media laterais': mediaLaterais, 'Media tiros de meta': mediaTirosDeMeta, 'Media cartões vermelhos': mediaCartoesVermelhos}), 200
 
