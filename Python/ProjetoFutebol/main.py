@@ -1,4 +1,5 @@
 def analisaDados(time, quantidadeJogos):
+    print("AAA")
     import Funcoes.raspagemDadosTime as raspagem
     import Funcoes.criaListaJogos as listaJogos
     import Funcoes.criaListaTimes as listaTimes
