@@ -1,7 +1,6 @@
 def analisaDados(time, quantidadeJogos):
     import sys
-    sys.path.append(
-        'D:\Clones\FrontAnaliseDadosFutebol\Python\ProjetoFutebol\Funcoes')
+    sys.path.append('D:\Clones\FrontAnaliseDadosFutebol\Python\ProjetoFutebol\Funcoes')
     import Funcoes.raspagemDadosTime as raspagem
     import Funcoes.criaListaJogos as listaJogos
     import Funcoes.criaListaTimes as listaTimes
@@ -12,6 +11,7 @@ def analisaDados(time, quantidadeJogos):
     import Escanteios.valorMedias as valorMedias
     import re
 
+    print("Aqui")
     response = raspagem.raspagemDados(time)
 
     # cria uma lista dessa raspagem de dados
