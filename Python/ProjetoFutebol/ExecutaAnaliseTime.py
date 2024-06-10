@@ -20,6 +20,9 @@ config = {
     'host': 'database-futview.cz08g8ycqqvg.us-east-2.rds.amazonaws.com',
     'database': 'DbFutView'
 }
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 # Função para executar a análise
 @app.route('/executaAnalise')
 def executaAnalise():
