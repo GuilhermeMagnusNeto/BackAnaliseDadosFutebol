@@ -18,11 +18,13 @@ CORS(app, resources={
 config = {
     'user': 'admin',
     'password': 'futviewpass',
-    'host': 'database-futview.cz08g8ycqqvg.us-east-2.rds.amazonaws.com',
+    'host': 'mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com',
     'database': 'DbFutView'
 }
 
 # Função para executar a análise
+
+
 @app.route('/executaAnalise')
 def executaAnalise():
     try:
@@ -34,7 +36,8 @@ def executaAnalise():
         cursor = conn.cursor()
 
         # Execute sua análise
-        mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaImpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos = analise.analisaDados(time, quantidadeJogos)
+        mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaImpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos = analise.analisaDados(
+            time, quantidadeJogos)
 
         # Feche o cursor e a conexão
         cursor.close()
@@ -47,6 +50,8 @@ def executaAnalise():
         return jsonify({'error': str(e)}), 500
 
 # Função para pesquisar times
+
+
 @app.route('/pesquisaTimes')
 def pesquisaTimes():
     try:
@@ -66,7 +71,7 @@ def pesquisaTimes():
             conn.close()
 
             return jsonify({'Dados': times}), 200
-        
+
         if time is not None and pais is None:
             # Conexão com o banco de dados
             conn = mysql.connector.connect(**config)
@@ -84,7 +89,8 @@ def pesquisaTimes():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+
 @app.route('/salvarAnotacao', methods=['POST'])
 def salvarAnotacao():
     try:
@@ -111,7 +117,8 @@ def salvarAnotacao():
     except Exception as e:
         print("Erro interno no servidor:", e)
         return jsonify({'error': str(e)}), 500
-    
+
+
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
 def atualizarNota(id_nota):
     try:
@@ -124,7 +131,8 @@ def atualizarNota(id_nota):
         cursor = conn.cursor()
 
         # Execute a atualização de dados no banco de dados
-        cursor.execute("UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
+        cursor.execute(
+            "UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
         conn.commit()
 
         # Feche o cursor e a conexão
@@ -134,7 +142,8 @@ def atualizarNota(id_nota):
         return jsonify({'message': 'Nota atualizada com sucesso!'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+
 @app.route('/carregarNotas', methods=['GET'])
 def carregarNotas():
     try:
@@ -151,7 +160,8 @@ def carregarNotas():
         conn.close()
 
         # Converter as notas para um formato adequado (por exemplo, lista de dicionários)
-        notas_formatadas = [{'id': nota[0], 'texto': nota[1], 'cor': nota[2]} for nota in notas]
+        notas_formatadas = [
+            {'id': nota[0], 'texto': nota[1], 'cor': nota[2]} for nota in notas]
 
         # Retorna as notas em formato JSON
         return jsonify({'notas': notas_formatadas}), 200
@@ -159,7 +169,7 @@ def carregarNotas():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])    
+@app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
 def excluirNota(id_nota):
     try:
         # Conexão com o banco de dados
@@ -177,6 +187,7 @@ def excluirNota(id_nota):
         return jsonify({'message': 'Nota excluída com sucesso!'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
