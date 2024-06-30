@@ -3,6 +3,7 @@ from flask_cors import CORS
 import main as analise
 import Funcoes.pesquisaTimes as pesquisa
 import mysql.connector
+from OpenSSL import SSL
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -21,6 +22,15 @@ config = {
     'host': 'mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com',
     'database': 'DbFutView'
 }
+
+# Caminhos para o certificado PEM e a chave privada
+SSL_CERT = '/home/ec2-user/Certificado/FutViewChave.pem'
+SSL_KEY = '/home/ec2-user/Certificado/FutViewChave.pem'
+
+# Configuração do contexto SSL/TLS
+context = SSL.Context(SSL.SSLv23_METHOD)
+context.use_privatekey_file(SSL_KEY)
+context.use_certificate_file(SSL_CERT)
 
 # Função para executar a análise
 
@@ -190,4 +200,4 @@ def excluirNota(id_nota):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
