@@ -187,7 +187,38 @@ def excluirNota(id_nota):
         return jsonify({'message': 'Nota excluída com sucesso!'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/inserirDadosGoogle', methods=['POST'])
+def inserirDadosGoogle():
+    try:
+        dados = request.json  # Recebe os dados do frontend
 
+        # Verifica se já existe um registro com o mesmo 'sub'
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+
+        sql_verifica = "SELECT COUNT(*) FROM tbusuario WHERE sub = %s"
+        cursor.execute(sql_verifica, (dados['sub'],))
+        result = cursor.fetchone()[0]
+
+        if result > 0:
+            return jsonify({'message': 'Usuário já existe no banco de dados.'}), 400
+
+        # Insere os dados apenas se 'sub' não existir no banco de dados
+        sql_inserir = "INSERT INTO usuarios (email, sub, name) VALUES (%s, %s, %s)"
+        cursor.execute(sql_inserir, (dados['email'], dados['sub'], dados['name']))
+        conn.commit()
+
+        # Obtém o ID do usuário recém-inserido
+        id_usuario = cursor.lastrowid
+
+        # Fecha o cursor e a conexão
+        cursor.close()
+        conn.close()
+
+        return jsonify({'message': 'Dados inseridos com sucesso!', 'id': id_usuario}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
