@@ -1,8 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from functools import wraps
 import main as analise
 import Funcoes.pesquisaTimes as pesquisa
 import mysql.connector
+import jwt
+import datetime
+
+SECRET_KEY = 'VerificaLoginPass'
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -23,10 +28,28 @@ config = {
     'database': 'DbFutView'
 }
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 403
+
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            current_user = data['sub']
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 403
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
 # Função para executar a análise
 
-
 @app.route('/executaAnalise')
+@token_required
 def executaAnalise():
     try:
         time = request.args.get('time')
@@ -54,6 +77,7 @@ def executaAnalise():
 
 
 @app.route('/pesquisaTimes')
+@token_required
 def pesquisaTimes():
     try:
         time = request.args.get('time')
@@ -93,6 +117,7 @@ def pesquisaTimes():
 
 
 @app.route('/salvarAnotacao', methods=['POST'])
+@token_required
 def salvarAnotacao():
     try:
         # Obtenha os dados enviados pelo cliente
@@ -121,6 +146,7 @@ def salvarAnotacao():
 
 
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
+@token_required
 def atualizarNota(id_nota):
     try:
         # Obtenha os dados enviados pelo cliente
@@ -146,6 +172,7 @@ def atualizarNota(id_nota):
 
 
 @app.route('/carregarNotas', methods=['GET'])
+@token_required
 def carregarNotas():
     try:
         # Conexão com o banco de dados
@@ -171,6 +198,7 @@ def carregarNotas():
 
 
 @app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
+@token_required
 def excluirNota(id_nota):
     try:
         # Conexão com o banco de dados
@@ -203,7 +231,13 @@ def inserirDadosGoogle():
         result = cursor.fetchone()[0]
 
         if result > 0:
-            return jsonify({'message': 'Usuário já existe no banco de dados.'}), 400
+            # Gera um token JWT
+            token = jwt.encode({
+                'sub': dados['sub'],
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            }, SECRET_KEY, algorithm='HS256')
+
+            return jsonify({'message': 'Usuário já existe no banco de dados.', 'token': token}), 200
 
         # Insere os dados apenas se 'sub' não existir no banco de dados
         sql_inserir = "INSERT INTO tbusuario (emailUsuario, subUsuario, nomeUsuario) VALUES (%s, %s, %s)"
@@ -217,9 +251,29 @@ def inserirDadosGoogle():
         cursor.close()
         conn.close()
 
-        return jsonify({'message': 'Dados inseridos com sucesso!', 'id': id_usuario}), 200
+        # Gera um token JWT
+        token = jwt.encode({
+            'sub': dados['sub'],
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        }, SECRET_KEY, algorithm='HS256')
+
+        return jsonify({'message': 'Dados inseridos com sucesso!', 'id': id_usuario, 'token': token}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/verificarToken', methods=['POST'])
+def verificarToken():
+    token = request.json.get('token')
+    if not token:
+        return jsonify({'valid': False}), 400
+
+    try:
+        data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        return jsonify({'valid': True}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'valid': False, 'error': 'Token expired'}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({'valid': False, 'error': 'Invalid token'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
