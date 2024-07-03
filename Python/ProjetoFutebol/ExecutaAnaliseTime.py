@@ -206,7 +206,7 @@ def inserirDadosGoogle():
             return jsonify({'message': 'Usuário já existe no banco de dados.'}), 400
 
         # Insere os dados apenas se 'sub' não existir no banco de dados
-        sql_inserir = "INSERT INTO usuarios (emailUsuario, subUsuario, nomeUsuario) VALUES (%s, %s, %s)"
+        sql_inserir = "INSERT INTO tbusuario (emailUsuario, subUsuario, nomeUsuario) VALUES (%s, %s, %s)"
         cursor.execute(sql_inserir, (dados['email'], dados['sub'], dados['name']))
         conn.commit()
 
