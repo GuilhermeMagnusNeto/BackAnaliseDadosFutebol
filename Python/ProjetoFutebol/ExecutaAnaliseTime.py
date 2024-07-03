@@ -11,7 +11,8 @@ CORS(app, resources={
     r"/salvarAnotacao": {"origins": "*"},
     r"/carregarNotas": {"origins": "*"},
     r"/excluirNota/*": {"origins": "*"},
-    r"/atualizarNota/*": {"origins": "*"}
+    r"/atualizarNota/*": {"origins": "*"},
+    r"/inserirDadosGoogle*": {"origins": "*"}
 })
 
 # Configurações de conexão com o banco de dados
