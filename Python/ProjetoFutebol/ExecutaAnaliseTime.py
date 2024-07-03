@@ -88,7 +88,8 @@ def executaAnalise(current_user):
 
 
 @app.route('/pesquisaTimes')
-def pesquisaTimes():
+@token_required
+def pesquisaTimes(current_user):
     try:
         time = request.args.get('time')
         pais = request.args.get('pais')
