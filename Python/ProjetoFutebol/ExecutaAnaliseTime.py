@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, redirect, url_for
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import main as analise
 import Funcoes.pesquisaTimes as pesquisa
@@ -203,7 +203,7 @@ def inserirDadosGoogle():
         result = cursor.fetchone()[0]
 
         if result > 0:
-            return redirect(url_for('https://futview.netlify.app/front/pesquisa'))
+            return jsonify({'message': 'Usuário já existe no banco de dados.'}), 400
 
         # Insere os dados apenas se 'sub' não existir no banco de dados
         sql_inserir = "INSERT INTO tbusuario (emailUsuario, subUsuario, nomeUsuario) VALUES (%s, %s, %s)"
@@ -217,7 +217,7 @@ def inserirDadosGoogle():
         cursor.close()
         conn.close()
 
-        return redirect(url_for('https://futview.netlify.app/front/pesquisa'))
+        return jsonify({'message': 'Dados inseridos com sucesso!', 'id': id_usuario}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
