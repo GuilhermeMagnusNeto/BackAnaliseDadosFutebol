@@ -197,7 +197,7 @@ def inserirDadosGoogle():
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
 
-        sql_verifica = "SELECT COUNT(*) FROM tbusuario WHERE sub = %s"
+        sql_verifica = "SELECT COUNT(*) FROM tbusuario WHERE subUsuario = %s"
         cursor.execute(sql_verifica, (dados['sub'],))
         result = cursor.fetchone()[0]
 
@@ -205,7 +205,7 @@ def inserirDadosGoogle():
             return jsonify({'message': 'Usuário já existe no banco de dados.'}), 400
 
         # Insere os dados apenas se 'sub' não existir no banco de dados
-        sql_inserir = "INSERT INTO usuarios (email, sub, name) VALUES (%s, %s, %s)"
+        sql_inserir = "INSERT INTO usuarios (emailUsuario, subUsuario, nomeUsuario) VALUES (%s, %s, %s)"
         cursor.execute(sql_inserir, (dados['email'], dados['sub'], dados['name']))
         conn.commit()
 
