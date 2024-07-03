@@ -33,25 +33,24 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization')
-
-        if not token:
+        if not token or not token.startswith('Bearer '):
             return jsonify({'message': 'Token is missing!'}), 403
-
+        token = token.split(' ')[1]
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
             current_user = data['sub']
-        except:
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token expired!'}), 403
+        except jwt.InvalidTokenError:
             return jsonify({'message': 'Token is invalid!'}), 403
-
         return f(current_user, *args, **kwargs)
-
     return decorated
 
 # Função para executar a análise
 
 @app.route('/executaAnalise')
 @token_required
-def executaAnalise():
+def executaAnalise(current_user):
     try:
         time = request.args.get('time')
         quantidadeJogos = request.args.get('quantidadeJogos')
@@ -64,12 +63,23 @@ def executaAnalise():
         mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaImpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos = analise.analisaDados(
             time, quantidadeJogos)
 
-        # Feche o cursor e a conexão
         cursor.close()
         conn.close()
 
-        # Retorna os resultados da análise em formato JSON
-        return jsonify({'Media Gols': mediaGols, 'Media Escanteios': mediaEscanteios, 'Media cartões': mediaCartoes, 'Media posse de bola': mediaPosseDeBola, 'Media chutes no gol': mediaChutesNoGol, 'Media chutes para fora': mediaChutesParaFora, 'Media impedimentos': mediaImpedimentos, 'Media chutes livres': mediaChutesLivres, 'Media ataques': mediaAtaques, 'Media laterais': mediaLaterais, 'Media tiros de meta': mediaTirosDeMeta, 'Media cartões vermelhos': mediaCartoesVermelhos}), 200
+        return jsonify({
+            'Media Gols': mediaGols,
+            'Media Escanteios': mediaEscanteios,
+            'Media cartões': mediaCartoes,
+            'Media posse de bola': mediaPosseDeBola,
+            'Media chutes no gol': mediaChutesNoGol,
+            'Media chutes para fora': mediaChutesParaFora,
+            'Media impedimentos': mediaImpedimentos,
+            'Media chutes livres': mediaChutesLivres,
+            'Media ataques': mediaAtaques,
+            'Media laterais': mediaLaterais,
+            'Media tiros de meta': mediaTirosDeMeta,
+            'Media cartões vermelhos': mediaCartoesVermelhos
+        }), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -277,6 +287,4 @@ def verificarToken():
         return jsonify({'valid': False, 'error': 'Invalid token'}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-            
-            #ssl_context=('cert.pem', 'key.pem'))
+    app.run(host='0.0.0.0', port=5000, ssl_context=('cert.pem', 'key.pem'))
