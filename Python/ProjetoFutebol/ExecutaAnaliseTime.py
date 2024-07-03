@@ -89,38 +89,30 @@ def executaAnalise(current_user):
 
 @app.route('/pesquisaTimes')
 @token_required
-def pesquisaTimes():
+def pesquisaTimes(current_user):
     try:
         time = request.args.get('time')
         pais = request.args.get('pais')
 
-        if time is None and pais is not None:
-            # Conexão com o banco de dados
-            conn = mysql.connector.connect(**config)
-            cursor = conn.cursor()
+        # Conexão com o banco de dados
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
 
+        if time is None and pais is not None:
             # Execute sua pesquisa aqui, substituindo a chamada para pesquisa.pesquisaTimes()
             times = pesquisa.pesquisaTimes(pais)
-
             # Feche o cursor e a conexão
             cursor.close()
             conn.close()
-
             return jsonify({'Dados': times}), 200
 
         if time is not None and pais is None:
-            # Conexão com o banco de dados
-            conn = mysql.connector.connect(**config)
-            cursor = conn.cursor()
-
             # Execute sua pesquisa aqui, substituindo a chamada para pesquisa.pegarCodigo()
             lista = pesquisa.pegarCodigo(time)
             codigo = int(lista[0])
-
             # Feche o cursor e a conexão
             cursor.close()
             conn.close()
-
             return jsonify(codigo), 200
 
     except Exception as e:
