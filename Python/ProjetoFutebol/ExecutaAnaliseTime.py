@@ -19,7 +19,7 @@ CORS(app, resources={
     r"/atualizarNota/*": {"origins": "*"},
     r"/inserirDadosGoogle*": {"origins": "*"},
     r"/verificarToken*": {"origins": "*"}    
-})
+}, methods=["GET", "POST", "PUT", "DELETE"])
 
 # Configurações de conexão com o banco de dados
 config = {
