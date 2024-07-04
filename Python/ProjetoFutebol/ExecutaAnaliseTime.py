@@ -49,8 +49,7 @@ def token_required(f):
 # Função para executar a análise
 
 @app.route('/executaAnalise')
-@token_required
-def executaAnalise(current_user):
+def executaAnalise():
     try:
         time = request.args.get('time')
         quantidadeJogos = request.args.get('quantidadeJogos')
@@ -88,8 +87,7 @@ def executaAnalise(current_user):
 
 
 @app.route('/pesquisaTimes')
-@token_required
-def pesquisaTimes(current_user):
+def pesquisaTimes():
     try:
         time = request.args.get('time')
         pais = request.args.get('pais')
@@ -121,7 +119,7 @@ def pesquisaTimes(current_user):
 
 @app.route('/salvarAnotacao', methods=['POST'])
 @token_required
-def salvarAnotacao():
+def salvarAnotacao(current_user):
     try:
         # Obtenha os dados enviados pelo cliente
         anotacao = request.json['anotacao']
@@ -150,7 +148,7 @@ def salvarAnotacao():
 
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
 @token_required
-def atualizarNota(id_nota):
+def atualizarNota(id_nota, current_user):
     try:
         # Obtenha os dados enviados pelo cliente
         dados = request.get_json()
@@ -176,7 +174,7 @@ def atualizarNota(id_nota):
 
 @app.route('/carregarNotas', methods=['GET'])
 @token_required
-def carregarNotas():
+def carregarNotas(current_user):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
@@ -202,7 +200,7 @@ def carregarNotas():
 
 @app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
 @token_required
-def excluirNota(id_nota):
+def excluirNota(id_nota, current_user):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
