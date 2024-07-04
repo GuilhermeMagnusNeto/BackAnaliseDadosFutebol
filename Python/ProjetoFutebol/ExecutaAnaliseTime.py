@@ -148,7 +148,7 @@ def salvarAnotacao(current_user):
 
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
 @token_required
-def atualizarNota(id_nota):
+def atualizarNota(current_user, id_nota):
     try:
         # Obtenha os dados enviados pelo cliente
         dados = request.get_json()
@@ -168,7 +168,6 @@ def atualizarNota(id_nota):
         return jsonify({'error': f'Chave ausente no JSON: {str(e)}'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 @app.route('/carregarNotas', methods=['GET'])
 @token_required
