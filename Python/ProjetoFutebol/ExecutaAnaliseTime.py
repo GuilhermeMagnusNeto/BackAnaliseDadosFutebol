@@ -195,16 +195,9 @@ def carregarNotas(current_user):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/excluirNota/<int:id_nota>', methods=['DELETE', 'OPTIONS'])
+@app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
 @token_required
 def excluirNota(current_user, id_nota):
-    if request.method == 'OPTIONS':
-        response = jsonify({'message': 'Options request accepted'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Authorization, Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-        return response
-
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
