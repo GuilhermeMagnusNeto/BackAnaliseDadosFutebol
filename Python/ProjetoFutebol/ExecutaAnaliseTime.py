@@ -148,7 +148,7 @@ def salvarAnotacao(current_user):
 
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
 @token_required
-def atualizarNota(id_nota, current_user):
+def atualizarNota(id_nota):
     try:
         # Obtenha os dados enviados pelo cliente
         dados = request.get_json()
@@ -174,7 +174,7 @@ def atualizarNota(id_nota, current_user):
 
 @app.route('/carregarNotas', methods=['GET'])
 @token_required
-def carregarNotas(current_user):
+def carregarNotas():
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
@@ -200,7 +200,7 @@ def carregarNotas(current_user):
 
 @app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
 @token_required
-def excluirNota(id_nota, current_user):
+def excluirNota(id_nota):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
