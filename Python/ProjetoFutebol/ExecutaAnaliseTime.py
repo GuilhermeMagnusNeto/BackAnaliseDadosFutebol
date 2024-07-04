@@ -197,7 +197,7 @@ def carregarNotas(current_user):
 
 @app.route('/excluirNota/<int:id_nota>', methods=['DELETE'])
 @token_required
-def excluirNota(id_nota):
+def excluirNota(current_user, id_nota):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
