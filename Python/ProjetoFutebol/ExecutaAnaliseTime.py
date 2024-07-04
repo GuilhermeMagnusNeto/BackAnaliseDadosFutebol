@@ -128,35 +128,6 @@ def salvarAnotacao(current_user):
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
 
-        # Execute a inserção de dados no banco de dados
-        sql = "INSERT INTO tbnotas (texto) VALUES (%s)"
-        cursor.execute(sql, (anotacao,))
-        conn.commit()
-
-        # Obtenha o ID da nota recém-inserida
-        id_nota = cursor.lastrowid
-
-        # Feche o cursor e a conexão
-        cursor.close()
-        conn.close()
-
-        return jsonify({'message': 'Anotação salva com sucesso!', 'id': id_nota}), 200
-    except Exception as e:
-        print("Erro interno no servidor:", e)
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/salvarAnotacao', methods=['POST'])
-@token_required
-def salvarAnotacao(current_user):
-    try:
-        # Obtenha os dados enviados pelo cliente
-        anotacao = request.json['anotacao']
-
-        # Conexão com o banco de dados
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-
         # Execute a inserção de dados no banco de dados, incluindo o fkSub
         sql = "INSERT INTO tbnotas (texto, fkSub) VALUES (%s, %s)"
         cursor.execute(sql, (anotacao, current_user))
@@ -172,6 +143,30 @@ def salvarAnotacao(current_user):
         return jsonify({'message': 'Anotação salva com sucesso!', 'id': id_nota}), 200
     except Exception as e:
         print("Erro interno no servidor:", e)
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
+@token_required
+def atualizarNota(current_user, id_nota):
+    try:
+        # Obtenha os dados enviados pelo cliente
+        dados = request.get_json()
+        texto_nota = dados['anotacao']
+
+        # Conexão com o banco de dados usando context manager (with)
+        with mysql.connector.connect(**config) as conn, conn.cursor() as cursor:
+            # Execute a atualização de dados no banco de dados
+            cursor.execute("UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
+            conn.commit()
+
+        return jsonify({'message': 'Nota atualizada com sucesso!'}), 200
+
+    except mysql.connector.Error as e:
+        return jsonify({'error': str(e)}), 500
+    except KeyError as e:
+        return jsonify({'error': f'Chave ausente no JSON: {str(e)}'}), 400
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/carregarNotas', methods=['GET'])
