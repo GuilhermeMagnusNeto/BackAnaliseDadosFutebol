@@ -174,7 +174,7 @@ def atualizarNota(id_nota):
 
 @app.route('/carregarNotas', methods=['GET'])
 @token_required
-def carregarNotas():
+def carregarNotas(current_user):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
