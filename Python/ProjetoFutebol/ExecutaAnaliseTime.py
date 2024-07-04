@@ -178,7 +178,7 @@ def carregarNotas(current_user):
         cursor = conn.cursor()
 
         # Execute uma consulta para obter todas as notas do usuário logado
-        sql = "SELECT pkNotas, texto, cor FROM tbnotas WHERE fkSub = %s"
+        sql = "SELECT pkNotas, texto FROM tbnotas WHERE fkSub = %s"
         cursor.execute(sql, (current_user,))
         notas = cursor.fetchall()
 
@@ -188,7 +188,7 @@ def carregarNotas(current_user):
 
         # Converter as notas para um formato adequado (por exemplo, lista de dicionários)
         notas_formatadas = [
-            {'id': nota[0], 'texto': nota[1], 'cor': nota[2]} for nota in notas]
+            {'id': nota[0], 'texto': nota[1]} for nota in notas]
 
         # Retorna as notas em formato JSON
         return jsonify({'notas': notas_formatadas}), 200
