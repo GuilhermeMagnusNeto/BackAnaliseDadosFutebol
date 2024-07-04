@@ -157,7 +157,7 @@ def atualizarNota(current_user, id_nota):
         # Conexão com o banco de dados usando context manager (with)
         with mysql.connector.connect(**config) as conn, conn.cursor() as cursor:
             # Execute a atualização de dados no banco de dados
-            cursor.execute("UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
+            cursor.execute("UPDATE tbnotas SET texto = %s WHERE pkNotas = %s and fkSub = %s", (texto_nota, id_nota, current_user))
             conn.commit()
 
         return jsonify({'message': 'Nota atualizada com sucesso!'}), 200
