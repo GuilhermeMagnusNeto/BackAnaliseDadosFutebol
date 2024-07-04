@@ -169,16 +169,17 @@ def atualizarNota(current_user, id_nota):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/carregarNotas', methods=['GET'])
+@app.route('/carregarAnotacoes', methods=['GET'])
 @token_required
-def carregarNotas(current_user):
+def carregarAnotacoes(current_user):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
 
-        # Execute uma consulta para obter todas as notas do banco de dados
-        cursor.execute("SELECT * FROM tbnotas")
+        # Execute uma consulta para obter todas as notas do usuário logado
+        sql = "SELECT pkNotas, texto, cor FROM tbnotas WHERE fkSub = %s"
+        cursor.execute(sql, (current_user,))
         notas = cursor.fetchall()
 
         # Feche o cursor e a conexão
