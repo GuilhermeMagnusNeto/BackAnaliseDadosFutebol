@@ -148,7 +148,7 @@ def salvarAnotacao(current_user):
 
 @app.route('/atualizarNota/<int:id_nota>', methods=['PUT'])
 @token_required
-def atualizarNota(id_nota, current_user):
+def atualizarNota(id_nota):
     try:
         # Obtenha os dados enviados pelo cliente
         dados = request.get_json()
