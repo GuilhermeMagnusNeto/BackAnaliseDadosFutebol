@@ -169,9 +169,9 @@ def atualizarNota(current_user, id_nota):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/carregarAnotacoes', methods=['GET'])
+@app.route('/carregarNotas', methods=['GET'])
 @token_required
-def carregarAnotacoes(current_user):
+def carregarNotas(current_user):
     try:
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
