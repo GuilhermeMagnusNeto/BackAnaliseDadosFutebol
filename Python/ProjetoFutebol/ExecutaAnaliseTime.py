@@ -154,20 +154,18 @@ def atualizarNota(id_nota):
         dados = request.get_json()
         texto_nota = dados['anotacao']
 
-        # Conexão com o banco de dados
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-
-        # Execute a atualização de dados no banco de dados
-        cursor.execute(
-            "UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
-        conn.commit()
-
-        # Feche o cursor e a conexão
-        cursor.close()
-        conn.close()
+        # Conexão com o banco de dados usando context manager (with)
+        with mysql.connector.connect(**config) as conn, conn.cursor() as cursor:
+            # Execute a atualização de dados no banco de dados
+            cursor.execute("UPDATE tbnotas SET texto = %s WHERE pkNotas = %s", (texto_nota, id_nota))
+            conn.commit()
 
         return jsonify({'message': 'Nota atualizada com sucesso!'}), 200
+
+    except mysql.connector.Error as e:
+        return jsonify({'error': str(e)}), 500
+    except KeyError as e:
+        return jsonify({'error': f'Chave ausente no JSON: {str(e)}'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
