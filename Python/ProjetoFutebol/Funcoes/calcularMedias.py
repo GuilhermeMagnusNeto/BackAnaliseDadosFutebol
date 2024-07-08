@@ -223,6 +223,7 @@ def calcularMedias(timePesquisado, listaTotal):
                         totalPosseCasa = totalPosseCasa+float(listaTotal[contador+13].strip('%'))
                         totalPosseSofridosCasa = totalPosseSofridosCasa+float(listaTotal[contador+14].strip('%'))
                         quantidadeJogosPosseCasa += 1
+                        print("Posse Casa", totalPosseCasa, totalPosseSofridosCasa)
                     totalChutesNoGolCasa = totalChutesNoGolCasa+float(listaTotal[contador+16])
                     totalChutesNoGolSofridosCasa = totalChutesNoGolSofridosCasa+float(listaTotal[contador+17])
                     totalChutesParaForaCasa = totalChutesParaForaCasa+float(listaTotal[contador+19])
@@ -263,6 +264,7 @@ def calcularMedias(timePesquisado, listaTotal):
                             totalPosseFora = totalPosseCasa+float(listaTotal[contador+14].strip('%'))
                             totalPosseSofridosFora = totalPosseSofridosCasa+float(listaTotal[contador+13].strip('%'))
                             quantidadeJogosPosseFora += 1
+                            print("Posse Fora", totalPosseFora, totalPosseSofridosFora)
 
                     if contador + 17 < len(listaTotal):
                         totalChutesNoGolFora = totalChutesNoGolFora+float(listaTotal[contador+17])
@@ -301,6 +303,7 @@ def calcularMedias(timePesquisado, listaTotal):
     totalEscanteiosSofridos = totalEscanteiosSofridosFora + totalEscanteiosSofridosCasa
     quantidadeJogosTotal = quantidadeJogosFora + quantidadeJogosCasa
     quantidadeJogosPosseTotal = quantidadeJogosPosseCasa + quantidadeJogosPosseFora
+    print("Quantidade jogos posse total ", quantidadeJogosPosseTotal)
 
     #Calcuo média escanteios
     if quantidadeJogosCasa > 0:
@@ -366,7 +369,11 @@ def calcularMedias(timePesquisado, listaTotal):
         mediaPosseTotal = totalPosse/quantidadeJogosPosseTotal
         mediaPosseSofridosTotal = totalPosseSofridos/quantidadeJogosPosseTotal
     
+    print("Médias ", mediaPosseCasa, mediaPosseSofridosCasa, mediaPosseFora, mediaPosseSofridosFora, mediaPosseTotal, mediaPosseSofridosTotal)
+
     mediaPosseDeBola = [round(mediaPosseCasa,2), round(mediaPosseSofridosCasa,2), round(mediaPosseTotal,2), round(mediaPosseFora,2), round(mediaPosseSofridosFora,2), round(mediaPosseSofridosTotal,2)]
+
+
 
     #calculo dos totais de chutes no gol
     totalChutesNoGol = totalChutesNoGolFora + totalChutesNoGolCasa
