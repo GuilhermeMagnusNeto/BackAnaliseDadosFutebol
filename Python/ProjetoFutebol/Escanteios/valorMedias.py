@@ -41,9 +41,9 @@ def valorMedias(idPartidas):
         #DEVO PEGAR AS DEMAIS INFORMAÇÕES AQUII
 
         for item in range(len(lista)):
-            if '"Posse de bola"' == lista[item]:
+            if '"Posse de Bola"' == lista[item]:
                 print("ACHOUUU: ", lista[item], lista[item+9], lista[item+10])
-                if '"Posse de bola"' == lista[item] and lista[item+9] == '"value"':                    
+                if '"Posse de Bola"' == lista[item] and lista[item+9] == '"value"':                    
                     encontrouPosse = 1
                     posseDeBola.append(lista[item+10])
 
