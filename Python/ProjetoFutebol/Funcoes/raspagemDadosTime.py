@@ -10,5 +10,7 @@ def raspagemDados(time):
     payload = ""
     headers = {"Content-Type": "multipart/form-data; boundary=---011000010111000001101001"}
 
+    print(url)
+
     response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
     return response
