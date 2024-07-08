@@ -503,6 +503,5 @@ def calcularMedias(timePesquisado, listaTotal):
         mediaCartoesVermelhosSofridosTotal = totalCartoesVermelhosSofridos/quantidadeJogosTotal 
 
     mediaCartoesVermelhos = [round(mediaCartoesVermelhosCasa,2), round(mediaCartoesVermelhosSofridosCasa,2), round(mediaCartoesVermelhosTotal,2), round(mediaCartoesVermelhosFora,2), round(mediaCartoesVermelhosSofridosFora,2), round(mediaCartoesVermelhosSofridosTotal,2)]
-    print("Ultimo", mediaPosseDeBola)
 
     return(mediaGols, mediaEscanteios, mediaCartoes, mediaPosseDeBola, mediaChutesNoGol, mediaChutesParaFora, mediaimpedimentos, mediaChutesLivres, mediaAtaques, mediaLaterais, mediaTirosDeMeta, mediaCartoesVermelhos);
