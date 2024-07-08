@@ -32,9 +32,12 @@ def analisaDados(time, quantidadeJogos):
     # pega valores dos atributos
     posseDeBola, escanteios, cartoes, chutesGol, chutesFora, impedimentos, chutesLivres, ataques, lateraisCobrados, tirosDeMeta, cartoesVermelhos = valorMedias.valorMedias(idPartidas)
 
+    print(posseDeBola)
+
     # pega o resultado dos ultimos jogos com o nome dos times e placar
     listaTotal = listaTimes.criaListaTimes(listaJogos, idPartidas, escanteios, cartoes, posseDeBola, chutesGol, chutesFora, impedimentos, chutesLivres, ataques, lateraisCobrados, tirosDeMeta, cartoesVermelhos)
 
+    print("Lista total: ",listaTotal)
     # coloca as informações dentro de um txt
     arquivo.criaArquivo(listaTotal, quantidadeJogos)
     print("Processo concluido!!!\n")
