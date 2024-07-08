@@ -261,8 +261,8 @@ def calcularMedias(timePesquisado, listaTotal):
 
                     if contador + 14 < len(listaTotal):
                         if listaTotal[contador + 13] != '0%' and listaTotal[contador + 13] != '100%':
-                            totalPosseFora = totalPosseCasa+float(listaTotal[contador+14].strip('%'))
-                            totalPosseSofridosFora = totalPosseSofridosCasa+float(listaTotal[contador+13].strip('%'))
+                            totalPosseFora = totalPosseFora+float(listaTotal[contador+14].strip('%'))
+                            totalPosseSofridosFora = totalPosseSofridosFora+float(listaTotal[contador+13].strip('%'))
                             quantidadeJogosPosseFora += 1
                             print("Posse Fora", totalPosseFora, totalPosseSofridosFora)
 
