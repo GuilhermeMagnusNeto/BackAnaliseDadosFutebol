@@ -11,7 +11,7 @@ def pesquisaTimes(pais):
 
             resultados = cursor.fetchall()
 
-            consulta = "SELECT t.nomeTimes, p.nomePais FROM tbtimes t INNER JOIN tbpais p ON p.pkPais = t.fkPais WHERE t.fkPais = %s ORDER BY p.pkPais"
+            consulta = "SELECT t.nomeTimes, p.nomePais FROM tbtimes t INNER JOIN tbpais p ON p.pkPais = t.fkPais WHERE t.fkPais = %s ORDER BY p.pkPais, t.nomeTimes"
             cursor.execute(consulta, (resultados[0][0],))
 
             resultados = cursor.fetchall()
