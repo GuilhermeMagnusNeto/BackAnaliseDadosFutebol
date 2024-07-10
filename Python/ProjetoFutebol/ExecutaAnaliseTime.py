@@ -18,7 +18,8 @@ CORS(app, resources={
     r"/excluirNota/*": {"origins": "*"},
     r"/atualizarNota/*": {"origins": "*"},
     r"/inserirDadosGoogle*": {"origins": "*"},
-    r"/verificarToken*": {"origins": "*"}    
+    r"/verificarToken*": {"origins": "*"},
+    r"/pesquisarTimesFavoritos*": {"origins": "*"}        
 }, methods=["GET", "POST", "PUT", "DELETE"])
 
 # Configurações de conexão com o banco de dados
