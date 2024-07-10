@@ -282,8 +282,13 @@ def pesquisarTimesFavoritos(current_user):
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
 
-        # Execute a consulta para obter os times favoritos do usuário logado
-        sql = "SELECT fkTime FROM tbtimefavorito WHERE fkSub = %s"
+        # Execute a consulta para obter os nomes dos times favoritos do usuário logado
+        sql = """
+        SELECT t.nomeTimes 
+        FROM tbtimefavorito tf
+        INNER JOIN tbtimes t ON t.pkTimes = tf.fkTime
+        WHERE tf.fkSub = %s
+        """
         cursor.execute(sql, (current_user,))
         times_favoritos = cursor.fetchall()
 
@@ -291,7 +296,7 @@ def pesquisarTimesFavoritos(current_user):
         cursor.close()
         conn.close()
 
-        # Converter os resultados para uma lista simples de times
+        # Converter os resultados para uma lista simples de nomes de times
         times_formatados = [time[0] for time in times_favoritos]
 
         # Retorna os times em formato JSON
