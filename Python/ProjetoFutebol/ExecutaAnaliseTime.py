@@ -273,6 +273,31 @@ def verificarToken():
         return jsonify({'valid': False, 'error': 'Token expired'}), 400
     except jwt.InvalidTokenError:
         return jsonify({'valid': False, 'error': 'Invalid token'}), 400
+    
+@app.route('/pesquisarTimesFavoritos', methods=['GET'])
+@token_required
+def pesquisarTimesFavoritos(current_user):
+    try:
+        # Conexão com o banco de dados
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+
+        # Execute a consulta para obter os times favoritos do usuário logado
+        sql = "SELECT fkTime FROM tbtimefavorito WHERE fkSub = %s"
+        cursor.execute(sql, (current_user,))
+        times_favoritos = cursor.fetchall()
+
+        # Feche o cursor e a conexão
+        cursor.close()
+        conn.close()
+
+        # Converter os resultados para uma lista simples de times
+        times_formatados = [time[0] for time in times_favoritos]
+
+        # Retorna os times em formato JSON
+        return jsonify({'Dados': times_formatados}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000) #ssl_context=('cert.pem', 'key.pem'))
