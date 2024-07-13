@@ -310,8 +310,9 @@ def pesquisarTimesFavoritos(current_user):
 @token_required
 def timesFavoritos(current_user):
     try:
-        time = request.args.get('time')
-        id = request.args.get('id')
+        data = request.json
+        time = data.get('time')
+        id = data.get('id')
 
         # Conexão com o banco de dados
         conn = mysql.connector.connect(**config)
@@ -319,12 +320,18 @@ def timesFavoritos(current_user):
 
         lista = pesquisa.pegarCodigo(time)
         codigo = int(lista[0])
-        # Feche o cursor e a conexão
+
+        # Verifique se é para adicionar ou remover o favorito
         if id == 0: 
-            sql = "INSERT INTO tbtimefavorito (fkTime, fkSub) VALUES (%i, %s)"
+            sql = "INSERT INTO tbtimefavorito (fkTime, fkSub) VALUES (%s, %s)"
+            cursor.execute(sql, (codigo, current_user))
+            message = 'Time favorito adicionado com sucesso!'
         elif id == 1:
-            sql = " delete from tbtimefavorito where fkTime = %i and fkSub = %s)"
-        cursor.execute(sql, (codigo, current_user))
+            sql = "DELETE FROM tbtimefavorito WHERE fkTime = %s AND fkSub = %s"
+            cursor.execute(sql, (codigo, current_user))
+            message = 'Time favorito removido com sucesso!'
+        else:
+            raise ValueError("ID inválido. Deve ser 0 (adicionar) ou 1 (remover).")
 
         conn.commit()
 
@@ -332,7 +339,7 @@ def timesFavoritos(current_user):
         cursor.close()
         conn.close()
 
-        return jsonify({'message': 'Time favorito adicionado com sucesso!', 'time': time}), 200
+        return jsonify({'message': message, 'time': time}), 200
     except Exception as e:
         print("Erro interno no servidor:", e)
         return jsonify({'error': str(e)}), 500
