@@ -19,7 +19,8 @@ CORS(app, resources={
     r"/atualizarNota/*": {"origins": "*"},
     r"/inserirDadosGoogle*": {"origins": "*"},
     r"/verificarToken*": {"origins": "*"},
-    r"/pesquisarTimesFavoritos*": {"origins": "*"}        
+    r"/pesquisarTimesFavoritos*": {"origins": "*"},
+    r"/timesFavoritos*": {"origins": "*"}            
 }, methods=["GET", "POST", "PUT", "DELETE"])
 
 # Configurações de conexão com o banco de dados
@@ -303,6 +304,37 @@ def pesquisarTimesFavoritos(current_user):
         # Retorna os times em formato JSON
         return jsonify({'Dados': times_formatados}), 200
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/timesFavoritos', methods=['POST'])
+@token_required
+def timesFavoritos(current_user):
+    try:
+        time = request.args.get('time')
+        id = request.args.get('id')
+
+        # Conexão com o banco de dados
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+
+        lista = pesquisa.pegarCodigo(time)
+        codigo = int(lista[0])
+        # Feche o cursor e a conexão
+        if id == 0: 
+            sql = "INSERT INTO tbtimefavorito (fkTime, fkSub) VALUES (%i, %s)"
+        elif id == 1:
+            sql = " delete from tbtimefavorito where fkTime = %i and fkSub = %s)"
+        cursor.execute(sql, (codigo, current_user))
+
+        conn.commit()
+
+        # Feche o cursor e a conexão
+        cursor.close()
+        conn.close()
+
+        return jsonify({'message': 'Time favorito adicionado com sucesso!', 'time': time}), 200
+    except Exception as e:
+        print("Erro interno no servidor:", e)
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
