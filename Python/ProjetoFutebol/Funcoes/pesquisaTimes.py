@@ -1,9 +1,11 @@
 import Funcoes.conexao as conexaoBanco
 
+
 def pesquisaTimes(pais):
     if pais != 'padrao':
         try:
-            conexao = conexaoBanco.conectarBanco("mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
+            conexao = conexaoBanco.conectarBanco(
+                "mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
             cursor = conexao.cursor()
 
             consulta = "SELECT p.pkPais FROM tbpais p where upper(p.nomePais) = upper(%s)"
@@ -27,10 +29,11 @@ def pesquisaTimes(pais):
             raise e
     else:
         try:
-            conexao = conexaoBanco.conectarBanco("mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
+            conexao = conexaoBanco.conectarBanco(
+                "mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
             cursor = conexao.cursor()
 
-            consulta = "SELECT p.nomePais FROM tbpais p"
+            consulta = "SELECT p.nomePais FROM tbpais p where p.pkPais IN (select t.fkPais from tbtimes t)"
             cursor.execute(consulta)
 
             resultados = cursor.fetchall()
@@ -45,9 +48,11 @@ def pesquisaTimes(pais):
             return paises
         except Exception as e:
             raise e
-        
+
+
 def pegarCodigo(time):
-    conexao = conexaoBanco.conectarBanco("mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
+    conexao = conexaoBanco.conectarBanco(
+        "mysqlserver.czi6aewaekiq.us-east-2.rds.amazonaws.com", "admin", "futviewpass", "DbFutView")
     cursor = conexao.cursor()
 
     consulta = "SELECT t.pkTimes FROM tbtimes t where upper(t.nomeTimes) = upper(%s)"
