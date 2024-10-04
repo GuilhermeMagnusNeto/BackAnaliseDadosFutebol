@@ -19,7 +19,7 @@ CORS(app, resources={
     r"/atualizarNota/*": {"origins": "*"},
     r"/inserirDadosGoogle*": {"origins": "*"},
     r"/verificarToken*": {"origins": "*"},
-    r"/pesquisarTimesFavoritos*": {"origins": "*"},
+    r"/pesquisarTimesFavoritos*": {"origins": "54.177.145.149"},
     r"/timesFavoritos*": {"origins": "*"}            
 }, methods=["GET", "POST", "PUT", "DELETE"])
 
